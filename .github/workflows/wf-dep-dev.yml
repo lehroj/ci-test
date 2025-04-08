@@ -1,0 +1,19 @@
+# Name of the workflow
+name: Dev. deploy CI
+
+# Manual trigger
+on: workflow_dispatch
+
+concurrency:
+  # Unique group name to prevent concurrent runs
+  group: dev_deploy_lock
+  # Do not cancel a currently running workflow if a new one is triggered
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Only run this job if the workflow is triggered on a feature/* branch
+    if: startsWith(github.ref, 'refs/heads/feature/')
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "Job"
