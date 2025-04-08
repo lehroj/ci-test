@@ -6,14 +6,14 @@ on: workflow_dispatch
 
 concurrency:
   # Unique group name to prevent concurrent runs
-  group: dev_deploy_lock
+  group: stg_deploy_lock
   # Do not cancel a currently running workflow if a new one is triggered
   cancel-in-progress: false
 
 jobs:
   deploy:
-    # Only run this job if the workflow is triggered on a feature/* branch
-    if: startsWith(github.ref, 'refs/heads/feature/')
+    # Only run this job if the workflow is triggered on a release/* branch
+    if: startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,6 +24,7 @@ jobs:
       - name: Deploy
         uses: deployphp/action@v1
         with:
-          private-key: ${{ secrets.SSH_APP_STAGING_PRIVATE_KEY }}
-          deployer-version: '7.3.0'
-          dep: deploy dev
+          private-key: ${{ secrets.NEW_NA1149_SSH_KEY }}
+          known-hosts: ${{ secrets.NEW_NA119_PPROD_KNOW_HOST }}
+          deployer-version: '7.0.0-rc.8'
+          dep: deploy pprod
